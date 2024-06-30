@@ -10,5 +10,5 @@ model books {
   summary String
   comment String
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @default(now())
 }
