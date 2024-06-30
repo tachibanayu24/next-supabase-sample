@@ -10,8 +10,7 @@ export default async function handler(
   if (req.method === "GET") {
     const data = await supabase.from("books").select("*");
     // 200 OKは、リクエストが成功したことを示すステータスコード
-    //{ data } は { data: data } の省略形
-    res.status(200).json({ data });
+    res.status(200).json(data);
   }
   // 未定義のメソッドにリクエストが送信されたとき、405 Method Not Allowedを返す
   // GET -> データ取得
