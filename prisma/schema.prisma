@@ -1,0 +1,14 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model books {
+  id    Int     @id @default(autoincrement())
+  title String
+  summary String
+  comment String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
