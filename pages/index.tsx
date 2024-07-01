@@ -1,6 +1,7 @@
 import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Book } from "@/types/book";
+import { Button } from "@/components";
 
 // getServerSidePropsの返り値
 type ServerProps = { books: Book[] };
@@ -32,6 +33,9 @@ export default function Home(props: Props) {
       {/* 4xlとはxxxxlargeのことで、文字の大きさを指定している */}
       <h1 className="text-4xl font-bold">Book App</h1>
       <h2 className="text-2xl font-bold">本の一覧</h2>
+      <Button size="lg" onClick={() => console.log("clicked")}>
+        本の追加
+      </Button>
       {/* それぞれのクラス名にマウスオーバーすれば、どんなcssがあたっているかを確認できるのでチェックすること */}
       {/* flex-wrap: wrap; は、flexboxのプロパティで、要素が折り返されるようにするもの */}
       <div className="p-8 flex flex-wrap gap-4">
