@@ -26,16 +26,18 @@ type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Home(props: Props) {
   return (
-    <main>
+    <main className="py-4 px-8">
       {/* tailwindのclass名でstylingする
       tailwind.config.tsでtheming（テーマを作成すること）すればより使いやすくカスタマイズすることもできるが、
       何もしなくても十分柔軟なthemeが用意されている */}
       {/* 4xlとはxxxxlargeのことで、文字の大きさを指定している */}
       <h1 className="text-4xl font-bold">Book App</h1>
-      <h2 className="text-2xl font-bold">本の一覧</h2>
-      <Button size="lg" onClick={() => console.log("clicked")}>
-        本の追加
-      </Button>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">本の一覧</h2>
+        <Button size="lg" onClick={() => console.log("clicked")}>
+          本の追加
+        </Button>
+      </div>
       {/* それぞれのクラス名にマウスオーバーすれば、どんなcssがあたっているかを確認できるのでチェックすること */}
       {/* flex-wrap: wrap; は、flexboxのプロパティで、要素が折り返されるようにするもの */}
       <div className="p-8 flex flex-wrap gap-4">
