@@ -2,6 +2,7 @@ import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Book } from "@/types/book";
 import { Button } from "@/components";
+import { useRouter } from "next/router";
 
 // getServerSidePropsの返り値
 type ServerProps = { books: Book[] };
@@ -25,6 +26,22 @@ export const getServerSideProps: GetServerSideProps<ServerProps> = async ({
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Home(props: Props) {
+  // useRouterは、Next.jsのルーターを使うためのフック
+  // これを使うことで、ページ遷移などの処理を簡単に実現できる
+  const router = useRouter();
+
+  // 本を追加ボタンをクリックしたときに呼び出すハンドラー
+  // ハンドラーは、イベントが発生したときに実行する関数全般の呼称
+  // NOTE:
+  // ただし、単なる画面遷移の場合はハンドラーではなく < a > タグを使うべき
+  // なぜなら、Cmd + クリックで別タブで開いたりすることができないし、
+  // ブラウザにリンクとして認識されないのでアクセシビリティ的にも良くない
+  // 一旦ここではハンドラで実現してしまう
+  const handleClickNewButton = () => {
+    // ルーターを使ってページ遷移する
+    router.push("/new");
+  };
+
   return (
     <main className="py-4 px-8">
       {/* tailwindのclass名でstylingする
@@ -34,7 +51,9 @@ export default function Home(props: Props) {
       <h1 className="text-4xl font-bold">Book App</h1>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">本の一覧</h2>
-        <Button size="lg" onClick={() => console.log("clicked")}>
+        {/* onClickハンドラにhandleClickNewButtonを渡して、
+        ボタンがクリックされたときに関数が実行されるようにする */}
+        <Button size="lg" onClick={handleClickNewButton}>
           本の追加
         </Button>
       </div>
