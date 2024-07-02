@@ -1,10 +1,14 @@
 import { Button } from "@/components";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 // 本を新規追加するページ
 // Next.jsのページコンポーネントは、pagesディレクトリに配置することで、
 // 自動的にルーティングされる
 export default function New() {
+  // formにエラーがあるかどうかを管理するstate
+  // trueの場合はエラーあり
+  const [hasError, setHasError] = useState<boolean>(false);
+
   // formをsubmitしたときのハンドラー
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     // デフォルトの挙動をキャンセル
@@ -16,7 +20,19 @@ export default function New() {
     const summary = form.get("summary");
     const comment = form.get("comment");
 
+    // どれか一つでも空の場合はエラーにしてデータを送信せず終了
+    if (!title || !summary || !comment) {
+      setHasError(true);
+      // それ以降の処理を実行したくないのでreturnする
+      // ガード節または早期リターンと呼ばれる
+      return;
+    }
+
+    setHasError(false);
+
     console.log({ title, summary, comment });
+
+    // TODO: ここでサーバーに通信する
   };
 
   return (
@@ -55,6 +71,9 @@ export default function New() {
         <Button size="md" type="submit">
           保存
         </Button>
+        {hasError && (
+          <p className="text-red-600 pt-2">すべての項目を入力してください</p>
+        )}
       </form>
     </main>
   );
