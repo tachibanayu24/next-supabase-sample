@@ -23,22 +23,39 @@ export default function New() {
     <main className="py-4 px-8">
       <h1 className="text-4xl font-bold">Book App</h1>
       <h2 className="text-2xl font-bold">本の追加</h2>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <input name="title" className="border border-gray-600 rounded-md" />
+
+      <form onSubmit={handleSubmit} className="flex flex-col items-center">
+        {/* htmlForは、htmlでいうところのfor属性
+          jsでは、forは予約語なので、htmlForという名前になっている
+          対応するinputのnameを入れることで、ラベルとinputを紐付けることができる */}
+        <div className="py-4 w-1/2">
+          <label htmlFor="title">タイトル</label>
+          <input
+            name="title"
+            className="block border border-gray-600 rounded-md w-full p-2"
+          />
+        </div>
+
+        <div className="py-4 w-1/2">
+          <label htmlFor="summary">あらすじ</label>
           <textarea
             name="summary"
-            className="border border-gray-600 rounded-md"
+            className="block border border-gray-600 rounded-md w-full h-40 p-2"
           />
+        </div>
+
+        <div className="py-4 w-1/2">
+          <label htmlFor="comment">感想</label>
           <textarea
             name="comment"
-            className="border border-gray-600 rounded-md"
+            className="block border border-gray-600 rounded-md w-full h-40 p-2"
           />
-          <Button size="md" type="submit">
-            保存
-          </Button>
-        </form>
-      </div>
+        </div>
+
+        <Button size="md" type="submit">
+          保存
+        </Button>
+      </form>
     </main>
   );
 }
