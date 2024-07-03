@@ -12,6 +12,28 @@ export default async function handler(
     // 200 OKは、リクエストが成功したことを示すステータスコード
     res.status(200).json(data);
   }
+  // POST /api/books にリクエストが送信されたとき、booksテーブルにデータを追加する
+  else if (req.method === "POST") {
+    const { title, summary, comment } = req.body;
+
+    // こういうサーバー側のバリデーションをやるとなお良い
+    if (!title || !summary || !comment) {
+      // 400 Bad Requestは、リクエストが不正であることを示すステータスコード
+      return res.status(400).end("タイトル, あらすじ, 感想は必須です");
+    }
+
+    // booksテーブルに、データをインサートする
+    await supabase.from("books").insert([
+      {
+        title,
+        summary,
+        comment,
+      },
+    ]);
+
+    // 201 Createdは、リクエストが成功してリソースが作成されたことを示すステータスコード
+    res.status(201).end();
+  }
   // 未定義のメソッドにリクエストが送信されたとき、405 Method Not Allowedを返す
   // GET -> データ取得
   // POST -> データ作成

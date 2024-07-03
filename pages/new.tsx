@@ -1,16 +1,18 @@
 import { Button } from "@/components";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 
 // 本を新規追加するページ
 // Next.jsのページコンポーネントは、pagesディレクトリに配置することで、
 // 自動的にルーティングされる
 export default function New() {
+  const router = useRouter();
   // formにエラーがあるかどうかを管理するstate
   // trueの場合はエラーあり
   const [hasError, setHasError] = useState<boolean>(false);
 
   // formをsubmitしたときのハンドラー
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     // デフォルトの挙動をキャンセル
     // submit eventの場合は、ページがリロードされるのを防ぐ
     e.preventDefault();
@@ -28,11 +30,31 @@ export default function New() {
       return;
     }
 
+    // エラーがない場合は、エラーをリセットする
     setHasError(false);
 
-    console.log({ title, summary, comment });
-
-    // TODO: ここでサーバーに通信する
+    // サーバーにPOSTリクエストを送信する
+    // fetchは、ブラウザに組み込まれている関数で、サーバーにリクエストを送信することができる
+    await fetch("/api/books", {
+      // POSTリクエストを送信する
+      method: "POST",
+      // リクエストヘッダーに、Content-Typeを指定する
+      // APIはだいたいほとんどこの形(application/json)
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // jsのオブジェクトではなく、文字列に変換して送信する
+      body: JSON.stringify({
+        title,
+        summary,
+        comment,
+      }),
+    })
+      // thenは、fetchが成功した場合に実行される
+      .then(() => {
+        // 成功したらトップページにリダイレクトする
+        router.push("/");
+      });
   };
 
   return (
