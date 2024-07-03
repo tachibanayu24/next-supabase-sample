@@ -66,11 +66,20 @@ export default function Home(props: Props) {
             // [320px]という書き方は、具体的なpx数を指定してspacingする方法で、1px単位で指定できる
             // 指定せず w-8 などと書くと、 8 * 4px = 32px となる（デフォルトのthemeの場合）
             // 大きい値の場合は面倒なので、320pxなどと指定することが多い
-            className="w-[320px] border border-gray-600 rounded-lg p-4"
+            className="w-[30%] border border-gray-600 rounded-lg p-4"
           >
             <h3 className="text-lg font-bold mb-2">{book.title}</h3>
             <p className="mb-2">{book.summary}</p>
             <p>{book.created_at}</p>
+
+            <div className="flex gap-4 justify-end">
+              <a className="text-gray-700 underline hover:text-blue-700 cursor-pointer">
+                編集
+              </a>
+              <button className="text-gray-700 hover:text-red-700 underline">
+                削除
+              </button>
+            </div>
           </div>
         ))}
       </div>
