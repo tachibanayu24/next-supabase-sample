@@ -8,7 +8,13 @@ export default async function handler(
 ) {
   // GET /api/books にリクエストが送信されたとき、booksテーブルのすべてのデータを返す
   if (req.method === "GET") {
-    const data = await supabase.from("books").select("*");
+    // 実際に発行されるクエリは、
+    // SELECT * FROM books ORDER BY created_at ASC
+    const data = await supabase
+      .from("books")
+      .select("*")
+      // 作成日時の昇順で取得する
+      .order("created_at", { ascending: true });
     // 200 OKは、リクエストが成功したことを示すステータスコード
     res.status(200).json(data);
   }
