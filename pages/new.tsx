@@ -66,7 +66,7 @@ export default function New() {
         {/* htmlForは、htmlでいうところのfor属性
           jsでは、forは予約語なので、htmlForという名前になっている
           対応するinputのnameを入れることで、ラベルとinputを紐付けることができる */}
-        <div className="py-4 w-1/2">
+        <div className="py-4 lg:w-1/2 w-full">
           <label htmlFor="title">タイトル</label>
           <input
             name="title"
@@ -74,19 +74,19 @@ export default function New() {
           />
         </div>
 
-        <div className="py-4 w-1/2">
+        <div className="py-4 lg:w-1/2 w-full">
           <label htmlFor="summary">あらすじ</label>
           <textarea
             name="summary"
-            className="block border border-gray-600 rounded-md w-full h-40 p-2"
+            className="block border border-gray-600 rounded-md w-full h-60 p-2"
           />
         </div>
 
-        <div className="py-4 w-1/2">
+        <div className="py-4 lg:w-1/2 w-full">
           <label htmlFor="comment">感想</label>
           <textarea
             name="comment"
-            className="block border border-gray-600 rounded-md w-full h-40 p-2"
+            className="block border border-gray-600 rounded-md w-full h-60 p-2"
           />
         </div>
 
