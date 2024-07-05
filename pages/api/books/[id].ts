@@ -46,6 +46,14 @@ export default async function handler(
       .eq("id", req.query.id);
 
     res.status(200).json({ message: "Updated" });
+  } else if (req.method === "DELETE") {
+    // 実際に発行されるSQL文は以下の通り
+    // DELETE FROM books WHERE id = req.query.id
+    await supabase.from("books").delete().eq("id", req.query.id);
+    // ちなみに、データベースから完全に削除することを物理削除という
+    // 削除フラグを用いてデータは残したまま削除したように見せることを論理削除という
+
+    res.status(200).json({ message: "Deleted" });
   }
 
   // 未定義のメソッドにリクエストが送信されたとき、405 Method Not Allowedを返す

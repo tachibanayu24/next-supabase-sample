@@ -3,6 +3,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Book } from "@/types/book";
 import { Button } from "@/components";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 // getServerSidePropsの返り値
 type ServerProps = { books: Book[] };
@@ -29,6 +30,8 @@ export default function Home(props: Props) {
   // useRouterは、Next.jsのルーターを使うためのフック
   // これを使うことで、ページ遷移などの処理を簡単に実現できる
   const router = useRouter();
+  // 削除されたときにtrueになるstate
+  const [deleted, setDeleted] = useState<boolean>(false);
 
   // 本を追加ボタンをクリックしたときに呼び出すハンドラー
   // ハンドラーは、イベントが発生したときに実行する関数全般の呼称
@@ -40,6 +43,21 @@ export default function Home(props: Props) {
   const handleClickNewButton = () => {
     // ルーターを使ってページ遷移する
     router.push("/new");
+  };
+
+  // どのbookを削除するのかわからないといけないので、idを引数に取る
+  const handleClickDeleteButton = async (id: number) => {
+    await fetch(`/api/books/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
+    }).then(() => {
+      // 削除したら、deletedをtrueにする
+      setDeleted(true);
+      // asPathは現在のURLを取得する
+      router.replace(router.asPath);
+    });
   };
 
   return (
@@ -60,13 +78,22 @@ export default function Home(props: Props) {
       {/* それぞれのクラス名にマウスオーバーすれば、どんなcssがあたっているかを確認できるのでチェックすること */}
       {/* flex-wrap: wrap; は、flexboxのプロパティで、要素が折り返されるようにするもの */}
       <div className="p-8 flex flex-wrap gap-4">
+        {/* deletedがtrueのときに要素が評価される（レンダリングされる） */}
+        {/* 論理積は、左辺がtrueなら左辺、左辺がfalseなら右辺を評価する */}
+        {deleted && (
+          // 3秒立ったら消えるようにフェードイン・アウトする
+          <div className="w-full bg-green-200 p-4 rounded-lg mb-4 ">
+            削除しました
+          </div>
+        )}
         {props.books.map((book) => (
           <div
             key={book.id}
             // [320px]という書き方は、具体的なpx数を指定してspacingする方法で、1px単位で指定できる
             // 指定せず w-8 などと書くと、 8 * 4px = 32px となる（デフォルトのthemeの場合）
             // 大きい値の場合は面倒なので、320pxなどと指定することが多い
-            className="w-[30%] border border-gray-600 rounded-lg p-4"
+            // デバイスのサイズがlg以上のときは30%の幅を持つ
+            className="lg:w-[30%] w-full border border-gray-600 rounded-lg p-4"
           >
             <h3 className="text-lg font-bold mb-2">{book.title}</h3>
             <p className="mb-2">{book.summary}</p>
@@ -79,7 +106,12 @@ export default function Home(props: Props) {
               >
                 編集
               </a>
-              <button className="text-gray-700 hover:text-red-700 underline">
+              <button
+                // ハンドラーに引数ありの関数を渡すときは、アロー関数を使う
+                // なぜならば、アロー関数を使わないと、関数が即時実行されてしまうため
+                onClick={() => handleClickDeleteButton(book.id)}
+                className="text-gray-700 hover:text-red-700 underline"
+              >
                 削除
               </button>
             </div>
